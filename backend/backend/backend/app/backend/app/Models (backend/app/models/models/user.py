@@ -14,3 +14,31 @@ class User(Base):
     is_active = Column(Boolean, default=True)
     is_verified = Column(Boolean, default=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now())
+from pydantic import BaseModel, EmailStr
+from datetime import datetime
+
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+    full_name: str | None = None
+
+class UserLogin(BaseModel):
+    email: EmailStr
+    password: str
+
+class UserOut(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    full_name: str | None
+    bio: str
+    avatar_url: str
+    is_verified: bool
+    class Config: from_attributes = True
+
+class Token(BaseModel):
+    access_token: str
+    refresh_token: str
+    token_type: str = "bearer"
+    
